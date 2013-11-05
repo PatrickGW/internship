@@ -14,11 +14,21 @@ def welcome(request):
     age = 21
     return render_to_response('welcome.html')
 
+####### Adjustment Benjamin 5-11-13 #########
+def processUpload(request, filename):
+    def wrapper():
+        with open(filename) as f:
+            for line in f:
+                pass # doe iets met iedere bestandsregel
+    threading.Thread(target = wrapper).start()
+
+
 def upload(request):
     if request.method == 'POST':
         form = UploadPictureForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
+            processUpload(request, request.FILES["picture"]) # zie hier nog een extra regel
             return HttpResponseRedirect('/upload_success')
         
     else:
